@@ -185,7 +185,9 @@ Call `switch_stop_session` first, then `switch_start_session` again.
 ## Credits
 
 - **[Ipiano/gdb-mcp](https://github.com/Ipiano/gdb-mcp)** by Andrew Stelter — the upstream MCP server for GDB that this project is built on
-- **[blujay](https://twitter.com/jayblu_/)** — the Switch GDB commands (`.gdbinit.switch`, `attach.py`, `print_addr_setup.py`) from [smash-ultimate-research-setup](https://github.com/jam1garner/smash-ultimate-research-setup). Support blujay on [Ko-Fi](https://ko-fi.com/bludev)
+- **[Coolsonickirby/smash-ultimate-research-setup](https://github.com/Coolsonickirby/smash-ultimate-research-setup)** — the modified `.gdbinit.switch` and `attach.py` (auto-attach script) used in this project
+- **[blujay](https://twitter.com/jayblu_/)** — the original `.gdbinit.switch` commands
+- **CookieScythe** — `print_addr_setup.py` (address-to-offset resolution)
 - **[Gdbinit](https://github.com/gdbinit/Gdbinit)** by mammon_, elaine, pusillus, mong, zhang le, l0kit, truthix, fG!, gln — the extended `.gdbinit` configuration
 
 ## License
