@@ -1,6 +1,6 @@
 # gdb-multiarch-mcp
 
-An MCP (Model Context Protocol) server that gives AI assistants like Claude direct access to `gdb-multiarch` for debugging Nintendo Switch executables running on [Yuzu](https://github.com/yuzu-emu/yuzu) or a real console with a GDB stub.
+An MCP (Model Context Protocol) server that gives AI assistants like Claude direct access to `gdb-multiarch` for debugging Nintendo Switch executables running on Yuzu or a real console with a GDB stub.
 
 Built on top of [Ipiano/gdb-mcp](https://github.com/Ipiano/gdb-mcp), this fork adds Switch-specific debugging tools for offset-based breakpoints, instruction patching (NOP/stub/replace), frame-pointer backtraces, and address localization — all relative to the game's base address (`$main`).
 
