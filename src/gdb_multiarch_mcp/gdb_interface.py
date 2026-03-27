@@ -1157,12 +1157,42 @@ class GDBSession:
         return {"status": "success", "registers": registers}
 
     def stop(self) -> dict[str, Any]:
-        """Stop the GDB session."""
+        """Stop the GDB session.
+
+        Disconnects from any remote target first to avoid hanging,
+        then kills the GDB process with a timeout.
+        """
         if not self.controller:
             return {"status": "error", "message": "No active session"}
 
         try:
-            self.controller.exit()
+            # Disconnect from remote target first to prevent hang on exit
+            if self._is_gdb_alive():
+                try:
+                    self._send_command_and_wait_for_prompt(
+                        "-target-disconnect", timeout_sec=3
+                    )
+                except Exception:
+                    pass  # Best effort — might already be disconnected
+
+            # Kill the GDB process directly instead of graceful exit,
+            # which can hang when a remote target is unresponsive
+            try:
+                if (
+                    hasattr(self.controller, "gdb_process")
+                    and isinstance(self.controller.gdb_process, subprocess.Popen)
+                ):
+                    self.controller.gdb_process.terminate()
+                    try:
+                        self.controller.gdb_process.wait(timeout=3)
+                    except subprocess.TimeoutExpired:
+                        self.controller.gdb_process.kill()
+                        self.controller.gdb_process.wait(timeout=2)
+                else:
+                    self.controller.exit()
+            except Exception as e:
+                logger.warning(f"Error during GDB process cleanup: {e}")
+
             self.controller = None
             self.is_running = False
             self.target_loaded = False
@@ -1177,14 +1207,16 @@ class GDBSession:
 
         except Exception as e:
             logger.error(f"Failed to stop GDB session: {e}")
-            # Still try to restore working directory even if stop failed
+            # Force cleanup even on failure
+            self.controller = None
+            self.is_running = False
+            self.target_loaded = False
             if self.original_cwd:
                 try:
                     os.chdir(self.original_cwd)
-                    logger.info(f"Restored working directory after error: {self.original_cwd}")
                     self.original_cwd = None
-                except Exception as cwd_error:
-                    logger.warning(f"Failed to restore working directory: {cwd_error}")
+                except Exception:
+                    pass
             return {"status": "error", "message": str(e)}
 
     def get_status(self) -> dict[str, Any]:
