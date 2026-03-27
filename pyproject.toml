@@ -1,0 +1,32 @@
+[project]
+name = "gdb-multiarch-mcp"
+version = "0.1.0"
+description = "MCP server for gdb-multiarch debugging on Nintendo Switch via WSL"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=0.9.0",
+    "pygdbmi>=0.11.0.0",
+]
+
+[project.scripts]
+gdb-multiarch-mcp = "gdb_multiarch_mcp.server:run_server"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "mypy>=1.0.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+gdb_multiarch_mcp = ["scripts/*"]
+
+[tool.black]
+line-length = 100

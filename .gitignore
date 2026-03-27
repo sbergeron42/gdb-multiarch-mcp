@@ -1,0 +1,22 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+*.so
+.venv/
+venv/
+env/
+.env
+*.log
+.mypy_cache/
+.pytest_cache/
+dump.bin
+.claude/
+
+# Vendored upstream repos (not part of this project)
+gdb-mcp/
+smash-ultimate-research-setup/
